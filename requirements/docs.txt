@@ -1,0 +1,8 @@
+# lopper/requirements/docs.txt
+#
+# Requirements for generating package documentation.
+
+-r base.txt
+
+sphinx==1.7.0
+sphinx_rtd_theme==0.2.4
