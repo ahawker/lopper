@@ -11,7 +11,8 @@ import re
 LOGGER = logging.getLogger(__name__)
 
 
-def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, repository_owner: str) -> bool:
+def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, repository_owner: str,
+                          repository_name: str) -> bool:
     """
     Determine if the payload meets the necessary requirements for being a target for processing.
 
@@ -22,6 +23,8 @@ def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, rep
     :param base_branch: Regular expression to match base branches to accept
     :type: :class:`~string`
     :param repository_owner: Regular expression to match repository owners o accept
+    :type: :class:`~string`
+    :param repository_name: Regular expression to match repository names to accept
     :type: :class:`~string`
     :return: Boolean indicating if the payload should be processed further.
     :rtype: :class:`~bool`
@@ -37,6 +40,10 @@ def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, rep
 
     if not is_repository_owner_match(repository, repository_owner):
         LOGGER.info('Received payload for pull request that does not match owner pattern: {}'.format(repository_owner))
+        return False
+
+    if not is_repository_name_match(repository, repository_name):
+        LOGGER.info('Received payload for repository that does not match name pattern: {}'.format(repository_name))
         return False
 
     pull_request = payload.get('pull_request')
@@ -132,3 +139,18 @@ def is_repository_owner_match(repository: dict, repository_owner: str) -> bool:
         return False
     login = owner.get('login')
     return login and re.match(repository_owner, login) is not None
+
+
+def is_repository_name_match(repository: dict, repository_name: str) -> bool:
+    """
+    Determine if the payload represents a notification for a repository we should consider.
+
+    :param repository: Repository section of payload to examine
+    :type: :class:`~dict`
+    :param repository_name: Regular expression to match repository name to accept
+    :type: :class:`~string`
+    :return: Boolean indicating pull request state
+    :rtype: :class:`~bool`
+    """
+    name = repository.get('name')
+    return name and re.match(repository_name, name) is not None
