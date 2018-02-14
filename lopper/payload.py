@@ -22,7 +22,7 @@ def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, rep
     :type: :class:`~string`
     :param base_branch: Regular expression to match base branches to accept
     :type: :class:`~string`
-    :param repository_owner: Regular expression to match repository owners o accept
+    :param repository_owner: Regular expression to match repository owners to accept
     :type: :class:`~string`
     :param repository_name: Regular expression to match repository names to accept
     :type: :class:`~string`
@@ -39,7 +39,7 @@ def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, rep
         return False
 
     if not is_repository_owner_match(repository, repository_owner):
-        LOGGER.info('Received payload for pull request that does not match owner pattern: {}'.format(repository_owner))
+        LOGGER.info('Received payload for repository that does not match owner pattern: {}'.format(repository_owner))
         return False
 
     if not is_repository_name_match(repository, repository_name):
