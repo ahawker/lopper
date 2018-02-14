@@ -11,7 +11,7 @@ import re
 LOGGER = logging.getLogger(__name__)
 
 
-def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str) -> bool:
+def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, repository_owner: str) -> bool:
     """
     Determine if the payload meets the necessary requirements for being a target for processing.
 
@@ -21,11 +21,22 @@ def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str) -> 
     :type: :class:`~string`
     :param base_branch: Regular expression to match base branches to accept
     :type: :class:`~string`
-    :return: Boolean indicating if the payload should be processed futher.
+    :param repository_owner: Regular expression to match repository owners o accept
+    :type: :class:`~string`
+    :return: Boolean indicating if the payload should be processed further.
     :rtype: :class:`~bool`
     """
     if not is_pull_request_closed(payload):
         LOGGER.info('Received payload for pull request that was not closed')
+        return False
+
+    repository = payload.get('repository')
+    if not repository:
+        LOGGER.error('Received payload that is missing "repository" data')
+        return False
+
+    if not is_repository_owner_match(repository, repository_owner):
+        LOGGER.info('Received payload for pull request that does not match owner pattern: {}'.format(repository_owner))
         return False
 
     pull_request = payload.get('pull_request')
@@ -100,3 +111,21 @@ def is_pull_request_base_branch_match(pull_request: dict, base_branch: str) -> b
     """
     base = pull_request.get("base")
     return base and re.match(base_branch, base) is not None
+
+
+def is_repository_owner_match(repository: dict, repository_owner: str) -> bool:
+    """
+    Determine if the payload represents a notification for a repository we should consider.
+
+    :param repository: Repository section of payload to examine
+    :type: :class:`~dict`
+    :param repository_owner: Regular expression to match repository owners to accept
+    :type: :class:`~string`
+    :return: Boolean indicating pull request state
+    :rtype: :class:`~bool`
+    """
+    owner = repository.get("owner")
+    if not owner:
+        return False
+    login = owner.get("login")
+    return login and re.match(repository_owner, login) is not None
