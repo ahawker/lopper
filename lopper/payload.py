@@ -74,6 +74,7 @@ def is_pull_request_closed(payload: dict) -> bool:
 
 def is_pull_request_merged(pull_request: dict) -> bool:
     """
+    Determine if the pull request contains meta-data indicating it was merged.
 
     :param pull_request: Pull request section of payload to examine
     :type: :class:`~dict`
@@ -87,6 +88,7 @@ def is_pull_request_merged(pull_request: dict) -> bool:
 
 def is_pull_request_head_branch_match(pull_request: dict, head_branch: str) -> bool:
     """
+    Determine if the pull request represents a notification for a head branch we should consider.
 
     :param pull_request: Pull request section of payload to examine
     :type: :class:`~dict`
@@ -101,6 +103,7 @@ def is_pull_request_head_branch_match(pull_request: dict, head_branch: str) -> b
 
 def is_pull_request_base_branch_match(pull_request: dict, base_branch: str) -> bool:
     """
+    Determine if the pull request represents a notification for a base branch we should consider.
 
     :param pull_request: Pull request section of payload to examine
     :type: :class:`~dict`
