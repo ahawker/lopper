@@ -68,8 +68,8 @@ def is_pull_request_closed(payload: dict) -> bool:
     :return: Boolean indicating payload state
     :rtype: :class:`~bool`
     """
-    action = payload.get("action")
-    return action and action.lower() == "closed"
+    action = payload.get('action')
+    return action and action.lower() == 'closed'
 
 
 def is_pull_request_merged(pull_request: dict) -> bool:
@@ -81,8 +81,8 @@ def is_pull_request_merged(pull_request: dict) -> bool:
     :return: Boolean indicating pull request state
     :rtype: :class:`~bool`
     """
-    merged_at = pull_request.get("merged_at")
-    merged_commit_sha = pull_request.get("merged_commit_sha")
+    merged_at = pull_request.get('merged_at')
+    merged_commit_sha = pull_request.get('merged_commit_sha')
     return all((merged_at, merged_commit_sha))
 
 
@@ -97,7 +97,7 @@ def is_pull_request_head_branch_match(pull_request: dict, head_branch: str) -> b
     :return: Boolean indicating pull request state
     :rtype: :class:`~bool`
     """
-    head = pull_request.get("head")
+    head = pull_request.get('head')
     return head and re.match(head_branch, head) is not None
 
 
@@ -112,7 +112,7 @@ def is_pull_request_base_branch_match(pull_request: dict, base_branch: str) -> b
     :return: Boolean indicating pull request state
     :rtype: :class:`~bool`
     """
-    base = pull_request.get("base")
+    base = pull_request.get('base')
     return base and re.match(base_branch, base) is not None
 
 
@@ -127,8 +127,8 @@ def is_repository_owner_match(repository: dict, repository_owner: str) -> bool:
     :return: Boolean indicating pull request state
     :rtype: :class:`~bool`
     """
-    owner = repository.get("owner")
+    owner = repository.get('owner')
     if not owner:
         return False
-    login = owner.get("login")
+    login = owner.get('login')
     return login and re.match(repository_owner, login) is not None
