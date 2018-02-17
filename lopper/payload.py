@@ -29,7 +29,7 @@ def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, rep
     :return: Boolean indicating if the payload should be processed further.
     :rtype: :class:`~bool`
     """
-    if not is_pull_request_closed(payload):
+    if not _is_pull_request_closed(payload):
         LOGGER.info('Received payload for pull request that was not closed')
         return False
 
@@ -38,11 +38,11 @@ def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, rep
         LOGGER.error('Received payload that is missing "repository" data')
         return False
 
-    if not is_repository_owner_match(repository, repository_owner):
+    if not _is_repository_owner_match(repository, repository_owner):
         LOGGER.info('Received payload for repository that does not match owner pattern: {}'.format(repository_owner))
         return False
 
-    if not is_repository_name_match(repository, repository_name):
+    if not _is_repository_name_match(repository, repository_name):
         LOGGER.info('Received payload for repository that does not match name pattern: {}'.format(repository_name))
         return False
 
@@ -51,22 +51,22 @@ def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, rep
         LOGGER.error('Received payload that is missing "pull_request" data')
         return False
 
-    if not is_pull_request_merged(pull_request):
+    if not _is_pull_request_merged(pull_request):
         LOGGER.info('Received payload for pull request that was not merged')
         return False
 
-    if not is_pull_request_head_branch_match(pull_request, head_branch):
+    if not _is_pull_request_head_branch_match(pull_request, head_branch):
         LOGGER.info('Received payload for pull request that does not match head branch pattern: {}'.format(head_branch))
         return False
 
-    if not is_pull_request_base_branch_match(pull_request, base_branch):
+    if not _is_pull_request_base_branch_match(pull_request, base_branch):
         LOGGER.info('Received payload for pull request that does not match base branch patter: {}'.format(base_branch))
         return False
 
     return True
 
 
-def is_pull_request_closed(payload: dict) -> bool:
+def _is_pull_request_closed(payload: dict) -> bool:
     """
     Determine if the payload represents a notification of a pull request being closed.
 
@@ -79,7 +79,7 @@ def is_pull_request_closed(payload: dict) -> bool:
     return action and action.lower() == 'closed'
 
 
-def is_pull_request_merged(pull_request: dict) -> bool:
+def _is_pull_request_merged(pull_request: dict) -> bool:
     """
     Determine if the pull request contains meta-data indicating it was merged.
 
@@ -93,7 +93,7 @@ def is_pull_request_merged(pull_request: dict) -> bool:
     return all((merged_at, merged_commit_sha))
 
 
-def is_pull_request_head_branch_match(pull_request: dict, head_branch: str) -> bool:
+def _is_pull_request_head_branch_match(pull_request: dict, head_branch: str) -> bool:
     """
     Determine if the pull request represents a notification for a head branch we should consider.
 
@@ -108,7 +108,7 @@ def is_pull_request_head_branch_match(pull_request: dict, head_branch: str) -> b
     return head and re.match(head_branch, head) is not None
 
 
-def is_pull_request_base_branch_match(pull_request: dict, base_branch: str) -> bool:
+def _is_pull_request_base_branch_match(pull_request: dict, base_branch: str) -> bool:
     """
     Determine if the pull request represents a notification for a base branch we should consider.
 
@@ -123,7 +123,7 @@ def is_pull_request_base_branch_match(pull_request: dict, base_branch: str) -> b
     return base and re.match(base_branch, base) is not None
 
 
-def is_repository_owner_match(repository: dict, repository_owner: str) -> bool:
+def _is_repository_owner_match(repository: dict, repository_owner: str) -> bool:
     """
     Determine if the payload represents a notification for a repository we should consider.
 
@@ -141,7 +141,7 @@ def is_repository_owner_match(repository: dict, repository_owner: str) -> bool:
     return login and re.match(repository_owner, login) is not None
 
 
-def is_repository_name_match(repository: dict, repository_name: str) -> bool:
+def _is_repository_name_match(repository: dict, repository_name: str) -> bool:
     """
     Determine if the payload represents a notification for a repository we should consider.
 
