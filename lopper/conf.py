@@ -16,7 +16,7 @@ BASE_BRANCH_PATTERN = os.environ.get('GITHUB_BASE_BRANCH_PATTERN', '^master$')
 
 
 #: Environment variable to configure the head (merge) branch of a pull request merge to consider for closing.
-HEAD_BRANCH_PATTERN = os.environ.get('GITHUB_HEAD_BRANCH_PATTERN', '.*')
+HEAD_BRANCH_PATTERN = os.environ.get('GITHUB_HEAD_BRANCH_PATTERN', '\w+')
 
 
 #: Environment variable to configure the name of the repository owner of a pull request merge to consider for closing.
