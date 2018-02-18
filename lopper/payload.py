@@ -9,6 +9,18 @@ import re
 from lopper import response
 
 
+def get_target_branch_ref(payload: dict) -> str:
+    """
+    Retrieve the ref of the head branch that was merged in the pull request.
+
+    :param payload: Request payload to examine
+    :type: :class:`~dict`
+    :return: Ref of the merged head branch that should be deleted
+    :rtype: :class:`~str`
+    """
+    return payload['pull_request']['head']['ref']
+
+
 def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, repository_owner: str,
                           repository_name: str) -> response.Response:
     """
