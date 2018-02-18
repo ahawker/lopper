@@ -23,13 +23,13 @@ def is_authentic(payload_signature: str, payload: str, secret_token: str) -> res
     :return: Response object indicating if the payload is authentic
     :rtype: :class:`~lopper.response.Response`
     """
-    match = hmac.compare_digest(payload_signature, signature(payload, secret_token))
+    match = hmac.compare_digest(payload_signature, _signature(payload, secret_token))
     if not match:
         return response.unauthorized('Request signature does not match')
     return response.success('Request signature match')
 
 
-def signature(payload: str, secret_token: str) -> str:
+def _signature(payload: str, secret_token: str) -> str:
     """
     Compute a SHA-1 signature for the given data payload based on our shared secret.
 
