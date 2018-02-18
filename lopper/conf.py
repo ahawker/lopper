@@ -7,6 +7,10 @@
 import os
 
 
+#: Environment variable to configure the application name.
+APPLICATION_NAME = os.environ.get('LOPPER_APPLICATION_NAME', 'lopper')
+
+
 #: Environment variable to configure the base (target) branch of a pull request merge to consider for closing.
 BASE_BRANCH_PATTERN = os.environ.get('GITHUB_BASE_BRANCH_PATTERN', '^master$')
 
@@ -41,6 +45,8 @@ def validate() -> None:
     :rtype: :class:`~NoneType`
     :raises: :class:`~RuntimeError` when any configuration values are invalid
     """
+    if not APPLICATION_NAME:
+        raise RuntimeError('Must supply a non-empty application name')
     if not BASE_BRANCH_PATTERN:
         raise RuntimeError('Must supply a regex pattern for matching base branches')
     if not HEAD_BRANCH_PATTERN:
