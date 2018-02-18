@@ -7,8 +7,10 @@
 import hashlib
 import hmac
 
+from lopper import response
 
-def is_authentic(payload_signature: str, payload: str, secret_token: str) -> bool:
+
+def is_authentic(payload_signature: str, payload: str, secret_token: str) -> response.Response:
     """
     Perform signature comparison to determine if the given data payload is authentic.
 
@@ -18,10 +20,13 @@ def is_authentic(payload_signature: str, payload: str, secret_token: str) -> boo
     :type: :class:`~str`
     :param secret_token: Shared secret token used to create payload hash
     :type: :class:`~str`
-    :return: Boolean indicating authenticity of the payload
-    :rtype: :class:`~bool`
+    :return: Response object indicating if the payload is authentic
+    :rtype: :class:`~lopper.response.Response`
     """
-    return hmac.compare_digest(payload_signature, signature(payload, secret_token))
+    match = hmac.compare_digest(payload_signature, signature(payload, secret_token))
+    if not match:
+        return response.unauthorized('Request signature does not match')
+    return response.success('Request signature match')
 
 
 def signature(payload: str, secret_token: str) -> str:

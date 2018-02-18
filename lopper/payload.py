@@ -4,15 +4,13 @@
 
     Contains functionality for examining HTTP request payloads.
 """
-import logging
 import re
 
-
-LOGGER = logging.getLogger(__name__)
+from lopper import response
 
 
 def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, repository_owner: str,
-                          repository_name: str) -> bool:
+                          repository_name: str) -> response.Response:
     """
     Determine if the payload meets the necessary requirements for being a target for processing.
 
@@ -26,44 +24,40 @@ def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, rep
     :type: :class:`~string`
     :param repository_name: Regular expression to match repository names to accept
     :type: :class:`~string`
-    :return: Boolean indicating if the payload should be processed further.
-    :rtype: :class:`~bool`
+    :return: Response object indicating if the payload should be processed further.
+    :rtype: :class:`~lopper.response.Response`
     """
     if not _is_pull_request_closed(payload):
-        LOGGER.info('Received payload for pull request that was not closed')
-        return False
+        return response.unprocessable_entity('Received payload for pull request that was not closed')
 
     repository = payload.get('repository')
     if not repository:
-        LOGGER.error('Received payload that is missing "repository" data')
-        return False
+        return response.unprocessable_entity('Received payload that is missing "repository" data')
 
     if not _is_repository_owner_match(repository, repository_owner):
-        LOGGER.info('Received payload for repository that does not match owner pattern: {}'.format(repository_owner))
-        return False
+        msg = 'Received payload for repository that does not match owner pattern: {}'.format(repository_owner)
+        return response.unprocessable_entity(msg)
 
     if not _is_repository_name_match(repository, repository_name):
-        LOGGER.info('Received payload for repository that does not match name pattern: {}'.format(repository_name))
-        return False
+        msg = 'Received payload for repository that does not match name pattern: {}'.format(repository_name)
+        return response.unprocessable_entity(msg)
 
     pull_request = payload.get('pull_request')
     if not pull_request:
-        LOGGER.error('Received payload that is missing "pull_request" data')
-        return False
+        return response.unprocessable_entity('Received payload that is missing "pull_request" data')
 
     if not _is_pull_request_merged(pull_request):
-        LOGGER.info('Received payload for pull request that was not merged')
-        return False
+        return response.unprocessable_entity('Received payload for pull request that was not merged')
 
     if not _is_pull_request_head_branch_match(pull_request, head_branch):
-        LOGGER.info('Received payload for pull request that does not match head branch pattern: {}'.format(head_branch))
-        return False
+        msg = 'Received payload for pull request that does not match head branch pattern: {}'.format(head_branch)
+        return response.unprocessable_entity(msg)
 
     if not _is_pull_request_base_branch_match(pull_request, base_branch):
-        LOGGER.info('Received payload for pull request that does not match base branch patter: {}'.format(base_branch))
-        return False
+        msg = 'Received payload for pull request that does not match base branch patter: {}'.format(base_branch)
+        return response.unprocessable_entity(msg)
 
-    return True
+    return response.success('Pull request payload is acceptable to process')
 
 
 def _is_pull_request_closed(payload: dict) -> bool:
