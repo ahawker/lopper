@@ -45,7 +45,7 @@ def response(message, status_code: int = DEFAULT_STATUS_CODE, headers: dict = DE
     :rtype: :class:`~looper.response.Response`
     """
     headers['Content-Type'] = 'application/json'
-    return Response(message, headers, status_code)
+    return Response(dict(message=message, status_code=status_code), headers, status_code)
 
 
 #: Function partial for creating '200 OK' HTTP responses.
