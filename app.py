@@ -11,6 +11,7 @@ from lopper import auth, conf, hub, payload, response
 
 
 app = chalice.Chalice(app_name=conf.APPLICATION_NAME)
+app.debug = conf.DEBUG_MODE
 
 
 @app.route('/lopper', methods=['POST'])

@@ -11,6 +11,10 @@ import os
 APPLICATION_NAME = os.environ.get('LOPPER_APPLICATION_NAME', 'lopper')
 
 
+#: Environment variable to configure debug mode of the Chalice application.
+DEBUG_MODE = 'LOPPER_DEBUG_MODE' in os.environ
+
+
 #: Environment variable to configure the base (target) branch of a pull request merge to consider for closing.
 BASE_BRANCH_PATTERN = os.environ.get('GITHUB_BASE_BRANCH_PATTERN', '^master$')
 
