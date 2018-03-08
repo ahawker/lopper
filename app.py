@@ -5,6 +5,7 @@
     Contains `chalice` app for running an AWS Lambda function responsible for receiving GitHub webhook requests.
 """
 import chalice
+import typing
 
 from lopper import auth, conf, hub, payload, response
 
@@ -50,7 +51,8 @@ def is_request_acceptable(request,
                           head_branch: str = conf.HEAD_BRANCH_PATTERN,
                           base_branch: str = conf.BASE_BRANCH_PATTERN,
                           repository_owner: str = conf.REPOSITORY_OWNER,
-                          repository_name: str = conf.REPOSITORY_NAME):
+                          repository_name: str = conf.REPOSITORY_NAME,
+                          head_branch_exclusion: typing.List[str] = conf.HEAD_BRANCH_EXCLUSION):
     """
     Examine the given request object to determine if it's a merged pull request that should be processed.
 
@@ -62,6 +64,8 @@ def is_request_acceptable(request,
     :type: :class:`~string`
     :param repository_owner: Regular expression to match repository owners to accept
     :type: :class:`~string`
+    :param head_branch_exclusion: List of branch names to not accept
+    :type: :class: `~list`
     :param repository_name: Regular expression to match repository names to accept
     :return: Response object indicating whether or not the request should be further processed
     :rtype: :class:`~lopper.response.Response`
@@ -71,7 +75,8 @@ def is_request_acceptable(request,
     if not body:
         return response.unprocessable_entity('Request body is not JSON or empty')
 
-    return payload.is_acceptable_payload(body, head_branch, base_branch, repository_owner, repository_name)
+    return payload.is_acceptable_payload(body, head_branch, base_branch, repository_owner,
+                                         repository_name, head_branch_exclusion)
 
 
 def process_request(request, api_access_token: str = conf.API_ACCESS_TOKEN):

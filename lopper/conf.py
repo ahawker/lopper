@@ -19,6 +19,10 @@ BASE_BRANCH_PATTERN = os.environ.get('GITHUB_BASE_BRANCH_PATTERN', '^master$')
 HEAD_BRANCH_PATTERN = os.environ.get('GITHUB_HEAD_BRANCH_PATTERN', '\w+')
 
 
+#: Environment variable to configure the list of head branch names to exclude.
+HEAD_BRANCH_EXCLUSION = os.environ.get('GITHUB_HEAD_BRANCH_EXCLUSION', 'master').split(',')
+
+
 #: Environment variable to configure the name of the repository owner of a pull request merge to consider for closing.
 REPOSITORY_OWNER = os.environ.get('GITHUB_REPOSITORY_OWNER_PATTERN', '\w+')
 

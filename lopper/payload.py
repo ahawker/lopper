@@ -24,7 +24,7 @@ def get_target_branch_metadata(payload: dict) -> typing.Dict[str, str]:
 
 
 def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, repository_owner: str,
-                          repository_name: str) -> response.Response:
+                          repository_name: str, head_branch_exclusion: typing.List[str]) -> response.Response:
     """
     Determine if the payload meets the necessary requirements for being a target for processing.
 
@@ -38,6 +38,8 @@ def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, rep
     :type: :class:`~string`
     :param repository_name: Regular expression to match repository names to accept
     :type: :class:`~string`
+    :param head_branch_exclusion: List of branch names to not accept
+    :type: :class: `~list`
     :return: Response object indicating if the payload should be processed further.
     :rtype: :class:`~lopper.response.Response`
     """
@@ -65,6 +67,10 @@ def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, rep
 
     if not _is_pull_request_head_branch_match(pull_request, head_branch):
         msg = 'Received payload for pull request that does not match head branch pattern: {}'.format(head_branch)
+        return response.unprocessable_entity(msg)
+
+    if not _is_pull_request_head_branch_included(pull_request, head_branch_exclusion):
+        msg = 'Received payload for pull request that matches an excluded head branch name'
         return response.unprocessable_entity(msg)
 
     if not _is_pull_request_base_branch_match(pull_request, base_branch):
@@ -114,6 +120,22 @@ def _is_pull_request_head_branch_match(pull_request: dict, head_branch: str) -> 
     """
     head = pull_request.get('head')
     return head and re.match(head_branch, head) is not None
+
+
+def _is_pull_request_head_branch_included(pull_request: dict, head_branch_exclusion: typing.List[str]) -> bool:
+    """
+    Determine if the pull request represents a notification for a head branch we should consider
+    based on the fact that it is not in the exclusion list.
+
+    :param pull_request: Pull request section of payload to examine
+    :type: :class:`~dict`
+    :param head_branch_exclusion: List of branches to exclude
+    :type: :class:`~list`
+    :return: Boolean indicating pull request state
+    :rtype: :class:`~bool`
+    """
+    head = pull_request.get('head')
+    return head and head not in head_branch_exclusion
 
 
 def _is_pull_request_base_branch_match(pull_request: dict, base_branch: str) -> bool:
