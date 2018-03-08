@@ -13,7 +13,7 @@ from lopper import auth, conf, hub, payload, response
 app = chalice.Chalice(app_name=conf.APPLICATION_NAME)
 
 
-@app.route('/lopper')
+@app.route('/lopper', methods=['POST'])
 def handler():
     # Authorize the request by validating it's signature against our shared secret token.
     resp = is_request_authentic(app.current_request)
