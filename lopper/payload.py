@@ -5,20 +5,22 @@
     Contains functionality for examining HTTP request payloads.
 """
 import re
+import typing
 
 from lopper import response
 
 
-def get_target_branch_ref(payload: dict) -> str:
+def get_target_branch_metadata(payload: dict) -> typing.Dict[str, str]:
     """
-    Retrieve the ref of the head branch that was merged in the pull request.
+    Retrieve metadata of the head branch that was merged in the pull request.
 
     :param payload: Request payload to examine
     :type: :class:`~dict`
-    :return: Ref of the merged head branch that should be deleted
-    :rtype: :class:`~str`
+    :return: Metadata of the merged head branch that should be deleted
+    :rtype: :class:`~dict`
     """
-    return payload['pull_request']['head']['ref']
+    head = payload['pull_request']['head']
+    return dict(repo=head['repo']['full_name'], ref=head['ref'])
 
 
 def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, repository_owner: str,

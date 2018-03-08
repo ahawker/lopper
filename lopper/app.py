@@ -89,5 +89,5 @@ def process_request(request):
         return response.unprocessable_entity('Request body is not JSON or empty')
 
     # Grab ref of merged pull request head branch and delete it.
-    branch = payload.get_target_branch_ref(body)
-    return hub.delete_branch(branch)
+    metadata = payload.get_target_branch_metadata(body)
+    return hub.delete_branch(**metadata)
