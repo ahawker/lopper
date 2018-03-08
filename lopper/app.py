@@ -74,12 +74,14 @@ def is_request_acceptable(request,
     return payload.is_acceptable_payload(body, head_branch, base_branch, repository_owner, repository_name)
 
 
-def process_request(request):
+def process_request(request, api_access_token: str = conf.API_ACCESS_TOKEN):
     """
     Examine the given request to find the merged head branch and invoke the GitHub API to delete it.
 
     :param request: Request object to process deleting the merged head branch of
     :type request: :class:`~chalice.app.Request`
+    :param api_access_token: Access token for GitHub API client
+    :type api_access_token: :class:`~str`
     :return: Response object indicating the success of deleting the merged head branch
     :rtype: :class:`~lopper.response.Response`
     """
@@ -90,4 +92,4 @@ def process_request(request):
 
     # Grab ref of merged pull request head branch and delete it.
     metadata = payload.get_target_branch_metadata(body)
-    return hub.delete_branch(**metadata)
+    return hub.delete_branch(api_access_token, **metadata)

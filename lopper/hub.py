@@ -7,10 +7,12 @@
 from lopper import response
 
 
-def delete_branch(repo: str, ref: str) -> response.Response:
+def delete_branch(api_access_token: str, repo: str, ref: str) -> response.Response:
     """
     Delete the remote branch on the given repo at the given ref.
 
+    :param api_access_token: Access token for GitHub API client
+    :type api_access_token: :class:`~str`
     :param repo: GitHub repository that owns the ref
     :type repo: :class:`~str`
     :param ref: GitHub branch ref to delete
