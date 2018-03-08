@@ -58,3 +58,29 @@ unauthorized = functools.partial(response, status_code=401)
 
 #: Function partial for creating '422 Unprocessable Entity' HTTP responses.
 unprocessable_entity = functools.partial(response, status_code=422)
+
+
+#: Function partial for creating '500 Server Error' HTTP responses.
+server_error = functools.partial(response, status_code=500)
+
+
+#: Mapping for converting a numeric HTTP static code to the appropriate response partial function.
+PARTIAL_BY_STATUS = {
+    200: success,
+    401: unauthorized,
+    422: unprocessable_entity,
+    500: server_error
+}
+
+
+def partial_for_status(status_code: int) -> functools.partial:
+    """
+    Retrieve a function partial that returns a :class:`~lopper.response.Response` instance
+    for the given HTTP status code.
+
+    :param status_code: HTTP status code of the response
+    :type status_code: :class:`~int`
+    :return: Function partial that returns a response object.
+    :rtype: :class:`~functools.partial`
+    """
+    return PARTIAL_BY_STATUS.get(status_code, server_error)
