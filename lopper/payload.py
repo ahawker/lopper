@@ -31,13 +31,13 @@ def is_acceptable_payload(payload: dict, head_branch: str, base_branch: str, rep
     :param payload: Request payload to examine
     :type: :class:`~dict`
     :param head_branch: Regular expression to match head branches to accept
-    :type: :class:`~string`
+    :type: :class:`~str`
     :param base_branch: Regular expression to match base branches to accept
-    :type: :class:`~string`
+    :type: :class:`~str`
     :param repository_owner: Regular expression to match repository owners to accept
-    :type: :class:`~string`
+    :type: :class:`~str`
     :param repository_name: Regular expression to match repository names to accept
-    :type: :class:`~string`
+    :type: :class:`~str`
     :param head_branch_exclusion: List of branch names to not accept
     :type: :class: `~list`
     :return: Response object indicating if the payload should be processed further.
@@ -114,7 +114,7 @@ def _is_pull_request_head_branch_match(pull_request: dict, head_branch: str) -> 
     :param pull_request: Pull request section of payload to examine
     :type: :class:`~dict`
     :param head_branch: Regular expression to match head branches to accept
-    :type: :class:`~string`
+    :type: :class:`~str`
     :return: Boolean indicating pull request state
     :rtype: :class:`~bool`
     """
@@ -145,7 +145,7 @@ def _is_pull_request_base_branch_match(pull_request: dict, base_branch: str) -> 
     :param pull_request: Pull request section of payload to examine
     :type: :class:`~dict`
     :param base_branch: Regular expression to match base branches to accept
-    :type: :class:`~string`
+    :type: :class:`~str`
     :return: Boolean indicating pull request state
     :rtype: :class:`~bool`
     """
@@ -160,7 +160,7 @@ def _is_repository_owner_match(repository: dict, repository_owner: str) -> bool:
     :param repository: Repository section of payload to examine
     :type: :class:`~dict`
     :param repository_owner: Regular expression to match repository owners to accept
-    :type: :class:`~string`
+    :type: :class:`~str`
     :return: Boolean indicating pull request state
     :rtype: :class:`~bool`
     """
@@ -178,7 +178,7 @@ def _is_repository_name_match(repository: dict, repository_name: str) -> bool:
     :param repository: Repository section of payload to examine
     :type: :class:`~dict`
     :param repository_name: Regular expression to match repository name to accept
-    :type: :class:`~string`
+    :type: :class:`~str`
     :return: Boolean indicating pull request state
     :rtype: :class:`~bool`
     """

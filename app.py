@@ -59,11 +59,11 @@ def is_request_acceptable(request,
     :param request: Request object to examine for authenticity
     :type request: :class:`~chalice.app.Request`
     :param head_branch: Regular expression to match head branches to accept
-    :type: :class:`~string`
+    :type: :class:`~str`
     :param base_branch: Regular expression to match base branches to accept
-    :type: :class:`~string`
+    :type: :class:`~str`
     :param repository_owner: Regular expression to match repository owners to accept
-    :type: :class:`~string`
+    :type: :class:`~str`
     :param head_branch_exclusion: List of branch names to not accept
     :type: :class: `~list`
     :param repository_name: Regular expression to match repository names to accept
