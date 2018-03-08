@@ -15,6 +15,11 @@ app = chalice.Chalice(app_name=conf.APPLICATION_NAME)
 
 @app.route('/lopper', methods=['POST'])
 def handler():
+    # Validate the loaded configuration.
+    resp = is_configuration_valid(conf)
+    if not resp:
+        return resp
+
     # Authorize the request by validating it's signature against our shared secret token.
     resp = is_request_authentic(app.current_request)
     if not resp:
@@ -27,6 +32,21 @@ def handler():
 
     # Process the request with the goal of deleting the head branch of a merged pull request.
     return process_request(app.current_request)
+
+
+def is_configuration_valid(configuration) -> response.Response:
+    """
+    Example the loaded configuration in order to determine if it is valid.
+
+    :param configuration: Configuration module to validate
+    :type: Module
+    :return: A response instance indicating the validity of the configuration
+    :rtype: :class:`~lopper.response.Response`
+    """
+    try:
+        configuration.validate()
+    except RuntimeError as e:
+        return response.server_error(str(e))
 
 
 def is_request_authentic(request, secret_token: str = conf.WEBHOOK_SECRET_TOKEN):
