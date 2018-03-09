@@ -7,7 +7,7 @@
 import re
 import typing
 
-from lopper import response
+from chalicelib import response
 
 
 def get_target_branch_metadata(payload: dict) -> typing.Dict[str, str]:

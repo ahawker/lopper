@@ -6,7 +6,7 @@
 """
 import pytest
 
-from lopper import conf
+from chalicelib import conf
 
 
 @pytest.mark.xfail(reason='TODO')

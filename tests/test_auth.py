@@ -8,7 +8,7 @@ import random
 import string
 import pytest
 
-from lopper import auth
+from chalicelib import auth
 
 
 @pytest.fixture(scope='session')

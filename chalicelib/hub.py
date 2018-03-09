@@ -6,7 +6,7 @@
 """
 import github
 
-from lopper import response
+from chalicelib import response
 
 
 def exception_to_response(func):

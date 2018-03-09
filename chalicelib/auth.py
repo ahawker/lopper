@@ -7,7 +7,7 @@
 import hashlib
 import hmac
 
-from lopper import response
+from chalicelib import response
 
 
 def is_authentic(payload_signature: str, payload: str, secret_token: str) -> response.Response:
