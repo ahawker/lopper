@@ -42,7 +42,7 @@ API_ACCESS_TOKEN = os.environ.get('GITHUB_API_ACCESS_TOKEN')
 
 #: Environment variable to configure the Github Webhook Secret Token used to authenticate all incoming
 #: webhook HTTP request payloads.
-WEBHOOK_SECRET_TOKEN = os.environ.get('GITHUB_WEBHOOK_SECRET_TOKEN')
+WEBHOOK_SECRET_TOKEN = os.environ.get('GITHUB_WEBHOOK_SECRET_TOKEN', '').encode()
 
 
 def validate() -> None:

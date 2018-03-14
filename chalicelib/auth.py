@@ -10,7 +10,7 @@ import hmac
 from chalicelib import response
 
 
-def is_authentic(payload_signature: str, payload: str, secret_token: str) -> response.Response:
+def is_authentic(payload_signature: str, payload: str, secret_token: bytes) -> response.Response:
     """
     Perform signature comparison to determine if the given data payload is authentic.
 
@@ -19,7 +19,7 @@ def is_authentic(payload_signature: str, payload: str, secret_token: str) -> res
     :param payload: Request payload
     :type: :class:`~str`
     :param secret_token: Shared secret token used to create payload hash
-    :type: :class:`~str`
+    :type: :class:`~bytes`
     :return: Response object indicating if the payload is authentic
     :rtype: :class:`~lopper.response.Response`
     """
@@ -29,14 +29,14 @@ def is_authentic(payload_signature: str, payload: str, secret_token: str) -> res
     return response.success('Request signature match')
 
 
-def _signature(payload: str, secret_token: str) -> str:
+def _signature(payload: str, secret_token: bytes) -> str:
     """
     Compute a SHA-1 signature for the given data payload based on our shared secret.
 
     :param payload: Request payload
     :type: :class:`~str`
     :param secret_token: Shared secret token used to create payload hash
-    :type: :class:`~str`
+    :type: :class:`~bytes`
     :return: Computed signature string for the payload
     :rtype: :class:`~str`
     """

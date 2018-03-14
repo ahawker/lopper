@@ -50,14 +50,14 @@ def is_configuration_valid(configuration) -> response.Response:
         return response.server_error(str(e))
 
 
-def is_request_authentic(request, secret_token: str = conf.WEBHOOK_SECRET_TOKEN):
+def is_request_authentic(request, secret_token: bytes = conf.WEBHOOK_SECRET_TOKEN):
     """
     Examine the given request object to determine if it was sent by an authorized source.
 
     :param request: Request object to examine for authenticity
     :type request: :class:`~chalice.app.Request`
     :param secret_token: Shared secret token used to create payload hash
-    :type: :class:`~str`
+    :type: :class:`~bytes`
     :return: Response object indicating whether or not the request is authentic
     :rtype: :class:`~lopper.response.Response`
     """
