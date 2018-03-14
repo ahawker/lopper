@@ -45,6 +45,7 @@ def is_configuration_valid(configuration) -> response.Response:
     """
     try:
         configuration.validate()
+        return response.success('Configuration is valid')
     except RuntimeError as e:
         return response.server_error(str(e))
 
