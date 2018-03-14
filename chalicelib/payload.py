@@ -119,7 +119,10 @@ def _is_pull_request_head_branch_match(pull_request: dict, head_branch: str) -> 
     :rtype: :class:`~bool`
     """
     head = pull_request.get('head')
-    return head and re.match(head_branch, head) is not None
+    if not head:
+        return False
+    ref = head.get('ref')
+    return ref and re.match(head_branch, ref) is not None
 
 
 def _is_pull_request_head_branch_included(pull_request: dict, head_branch_exclusion: typing.List[str]) -> bool:
@@ -135,7 +138,10 @@ def _is_pull_request_head_branch_included(pull_request: dict, head_branch_exclus
     :rtype: :class:`~bool`
     """
     head = pull_request.get('head')
-    return head and head not in head_branch_exclusion
+    if not head:
+        return False
+    ref = head.get('ref')
+    return ref and ref not in head_branch_exclusion
 
 
 def _is_pull_request_base_branch_match(pull_request: dict, base_branch: str) -> bool:
@@ -150,7 +156,10 @@ def _is_pull_request_base_branch_match(pull_request: dict, base_branch: str) -> 
     :rtype: :class:`~bool`
     """
     base = pull_request.get('base')
-    return base and re.match(base_branch, base) is not None
+    if not base:
+        return False
+    ref = base.get('ref')
+    return ref and re.match(base_branch, ref) is not None
 
 
 def _is_repository_owner_match(repository: dict, repository_owner: str) -> bool:
