@@ -103,8 +103,8 @@ def _is_pull_request_merged(pull_request: dict) -> bool:
     :rtype: :class:`~bool`
     """
     merged_at = pull_request.get('merged_at')
-    merged_commit_sha = pull_request.get('merged_commit_sha')
-    return all((merged_at, merged_commit_sha))
+    merge_commit_sha = pull_request.get('merge_commit_sha')
+    return all((merged_at, merge_commit_sha))
 
 
 def _is_pull_request_head_branch_match(pull_request: dict, head_branch: str) -> bool:
