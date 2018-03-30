@@ -3,4 +3,4 @@
 # Requirements for using this package.
 
 typing==3.6.4; python_version < '3.6'
-pygithub
+pygithub==1.38
