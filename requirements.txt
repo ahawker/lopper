@@ -1,2 +1,2 @@
-chalice==1.2.0
+chalice==1.2.2
 PyGithub==1.39
