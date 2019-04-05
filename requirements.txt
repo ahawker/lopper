@@ -1,2 +1,2 @@
 chalice==1.8.0
-PyGithub==1.43.5
+PyGithub==1.43.6
